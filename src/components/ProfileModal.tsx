@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { X, Image as ImageIcon, Upload, Save } from 'lucide-react';
+import { X, Image as ImageIcon, Upload, Save, User } from 'lucide-react';
 import { auth, storage } from '../services/firebase';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface ProfileModalProps {
   onClose: () => void;
+  onProfileUpdate: () => void;
 }
 
-export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
+export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUpdate }) => {
   const user = auth.currentUser;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(user?.photoURL || null);
@@ -55,6 +56,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
       const photoURL = await getDownloadURL(snapshot.ref);
 
       await updateProfile(user, { photoURL });
+      await onProfileUpdate();
       setLoading(false);
       onClose();
     } catch (err: any) {

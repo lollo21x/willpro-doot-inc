@@ -75,13 +75,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <>
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
           onClick={onToggle}
         />
       )}
       
       <div className={`
-        fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md
+        fixed lg:relative inset-y-0 left-0 z-30 w-80 bg-white/80 dark:bg-gray-900/80
         border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-200 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>

@@ -21,7 +21,7 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const { isDark, toggleTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, reloadUser } = useAuth();
 
   const {
     conversations,
@@ -112,7 +112,7 @@ function App() {
             ) : (
               <button
                 onClick={() => setShowLoginModal(true)}
-                className="flex items-center gap-2 px-3 py-2 bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200/80 dark:hover:bg-gray-700/80 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
+                className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 <User className="w-4 h-4" />
                 <span>Login</span>
@@ -149,7 +149,7 @@ function App() {
       )}
 
       {showProfileModal && (
-        <ProfileModal onClose={() => setShowProfileModal(false)} />
+        <ProfileModal onClose={() => setShowProfileModal(false)} onProfileUpdate={reloadUser} />
       )}
     </div>
   );

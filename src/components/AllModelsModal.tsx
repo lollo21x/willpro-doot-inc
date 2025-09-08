@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, Eye, Brain, Sparkles, Code } from 'lucide-react';
 import { ModelType, ModelInfo } from '../types/chat';
 import { getModelsByProvider, getProviderDisplayName } from '../services/models';
@@ -148,7 +149,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
     return null;
   };
 
-  return (
+  const modalContent = (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4">
       <div 
         className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col my-auto"
@@ -222,4 +223,6 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.getElementById('modal-root')!);
 };

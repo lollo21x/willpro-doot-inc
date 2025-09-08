@@ -65,7 +65,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-700/80 transition-colors"
+            className="p-2 rounded-lg bg-white hover:bg-gray-100/80 dark:bg-gray-800 dark:hover:bg-gray-700/80 transition-colors"
             style={{ outline: 'none', boxShadow: 'none' }}
           >
             <X className="w-5 h-5 text-gray-500" />
@@ -204,19 +204,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 backdrop-blur-md text-white rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-900 dark:text-white"
         >
           <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
           Sign in with Google
         </button>
 
-        <div className="text-center mt-4">
-          {activeTab === 'login' ? (
-            null
-          ) : (
-            <p className="text-sm text-gray-500">Already have an account? <a href="#" onClick={() => setActiveTab('login')} className="text-[#FF8C00] hover:underline">Login</a></p>
-          )}
-        </div>
+        
 
         <div className="text-center mt-2">
           {activeTab === 'login' ? (

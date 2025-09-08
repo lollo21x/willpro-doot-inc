@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../services/firebase';
 
@@ -12,9 +12,18 @@ export const useAuth = () => {
       setIsLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
-  return { user, isLoading };
+  const reloadUser = useCallback(async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      await currentUser.reload();
+      // The onAuthStateChanged listener will handle setting the new user state
+      // To be sure, we can force a state update
+      setUser({ ...currentUser });
+    }
+  }, []);
+
+  return { user, isLoading, reloadUser };
 };
