@@ -131,14 +131,7 @@ export const AVAILABLE_MODELS: ModelInfo[] = [
     isPrimary: false,
     isBase: true,
   },
-  {
-    id: 'google/gemini-2.5-flash-image-preview:free',
-    name: 'Gemini 2.5 Flash Image Preview',
-    description: 'Google Gemini 2.5 Flash with image generation capabilities',
-    multimodal: true,
-    isPrimary: false,
-    isImageGenerator: true,
-  },
+
   {
     id: 'google/gemini-2.0-flash-exp:free',
     name: 'Gemini 2.0 Flash Experimental',
