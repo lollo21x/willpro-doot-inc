@@ -182,7 +182,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               inline-block px-4 py-3 rounded-2xl backdrop-blur-md
               ${isUser
                 ? 'bg-[#FF8C00]/80 text-white rounded-br-md'
-                : 'bg-gray-100/80 dark:bg-gray-800/80 text-gray-900 dark:text-white rounded-bl-md'
+                : 'bg-white text-gray-900 rounded-bl-md'
               }
             `}>
               {isUser ? (

@@ -1,33 +1,56 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { Brain, Code } from 'lucide-react';
 import { MessageBubble } from './MessageBubble';
 import { ChatInput } from './ChatInput';
 import { Message } from '../types/chat';
+import { useAuth } from '../hooks/useAuth';
 
 interface ChatInterfaceProps {
   messages: Message[];
   onSendMessage: (message: string, images?: string[]) => void;
   onRegenerateMessage: (messageId: string) => void;
   isLoading?: boolean;
-  conversationTitle?: string;
   multimodalEnabled?: boolean;
   isImageGenerator?: boolean;
   isReasoningModel?: boolean;
   isCoderModel?: boolean;
 }
 
+const WELCOME_MESSAGES = [
+  "What can I do for you today, [NAME]?",
+  "How may I assist you right now, [NAME]?",
+  "Is there something specific you need today, [NAME]?",
+  "How would you like me to support you, [NAME]?",
+  "What's on your mind today, [NAME]?",
+  "Do you need any help at the moment, [NAME]?",
+  "How can I be useful to you today, [NAME]?",
+  "What would you like me to do for you, [NAME]?",
+  "How may I serve you today, [NAME]?",
+  "Is there anything I can help you with, [NAME]?",
+  "What task should I assist you with, [NAME]?",
+  "How can I make things easier for you, [NAME]?",
+  "What's the first thing you'd like me to handle, [NAME]?",
+  "Do you have something I can help you with today, [NAME]?",
+  "How should I get started helping you, [NAME]?",
+  "Is there a way I can support you right now, [NAME]?",
+  "What do you need my assistance with, [NAME]?",
+  "How can I contribute to your day, [NAME]?",
+  "What would be most helpful for you now, [NAME]?",
+  "How can I make today better for you, [NAME]?",
+];
+
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   messages,
   onSendMessage,
   onRegenerateMessage,
   isLoading = false,
-  conversationTitle = 'New chat',
   multimodalEnabled = false,
   isImageGenerator = false,
   isReasoningModel = false,
   isCoderModel = false,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -37,35 +60,48 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     scrollToBottom();
   }, [messages]);
 
-  const getEmptyStateMessage = () => {
-    if (isImageGenerator) {
-      return "Describe the image you want to create and I'll generate it for you!";
+  const welcomeMessage = useMemo(() => {
+    const randomIndex = Math.floor(Math.random() * WELCOME_MESSAGES.length);
+    let message = WELCOME_MESSAGES[randomIndex];
+    if (user) {
+      const name = user.displayName || user.email?.split('@')[0] || 'there';
+      message = message.replace('[NAME]', name);
+    } else {
+      message = message.replace(', [NAME]?', '?');
     }
-    if (multimodalEnabled) {
-      return "Ask me anything or upload an image for analysis! I'm here to help you with questions, creative tasks, analysis, and much more.";
-    }
-    return "Ask me anything! I'm here to help you with questions, creative tasks, analysis, and much more.";
-  };
+    return message;
+  }, [user]);
+
+
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 dark:bg-gray-900 relative" style={{ zIndex: 1 }}>
+    <div
+      className="flex flex-col h-full relative"
+      style={{
+        zIndex: 1,
+        backgroundColor: '#FFF3E3',
+      }}
+    >
+      {/* Background Image Overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757425365/bg_oqntof.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: messages.length === 0 ? 1 : 0,
+          transition: 'opacity 1.5s ease-in-out',
+          zIndex: 0,
+        }}
+      />
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 pb-24">
+      <div className="flex-1 overflow-y-auto px-6 py-4 pb-24 relative z-10">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="w-16 h-16 bg-[#FF8C00]/20 dark:bg-[#FF8C00]/20 backdrop-blur-md rounded-full flex items-center justify-center mb-4 overflow-hidden">
-              <img 
-                src="https://res.cloudinary.com/dk0f2y0hu/image/upload/v1754574404/Will%20Pro%20AI%20favicon/WillPro-watchOS-Default-1024x1024_2x_rbdnnq.png"
-                alt="Will Pro AI"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
-              {isImageGenerator ? 'Create amazing images' : 'Start a conversation'}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 max-w-md">
-              {getEmptyStateMessage()}
-            </p>
+            <h1 className="text-4xl font-bold text-white mb-8 max-w-2xl leading-tight">
+              {welcomeMessage}
+            </h1>
           </div>
         ) : (
           <div className="max-w-4xl mx-auto">
