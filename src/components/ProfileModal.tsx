@@ -16,6 +16,18 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Split display name into first and last name
+  const [firstName, setFirstName] = useState(() => {
+    const name = user?.displayName || '';
+    const parts = name.split(' ');
+    return parts[0] || '';
+  });
+  const [lastName, setLastName] = useState(() => {
+    const name = user?.displayName || '';
+    const parts = name.split(' ');
+    return parts.slice(1).join(' ') || '';
+  });
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -42,8 +54,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
       setError('No user logged in.');
       return;
     }
-    if (!selectedFile) {
-      setError('No new image selected.');
+
+    // Check if there are any changes to save
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+    const hasNameChanged = fullName !== (user.displayName || '');
+    const hasPhotoChanged = selectedFile !== null;
+
+    if (!hasNameChanged && !hasPhotoChanged) {
+      setError('No changes to save.');
       return;
     }
 
@@ -51,11 +69,22 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
     setError(null);
 
     try {
-      const storageRef = ref(storage, `profile_pictures/${user.uid}/${selectedFile.name}`);
-      const snapshot = await uploadBytes(storageRef, selectedFile);
-      const photoURL = await getDownloadURL(snapshot.ref);
+      const updateData: { displayName?: string; photoURL?: string } = {};
 
-      await updateProfile(user, { photoURL });
+      // Update name if changed
+      if (hasNameChanged) {
+        updateData.displayName = fullName;
+      }
+
+      // Update photo if selected
+      if (hasPhotoChanged && selectedFile) {
+        const storageRef = ref(storage, `profile_pictures/${user.uid}/${selectedFile.name}`);
+        const snapshot = await uploadBytes(storageRef, selectedFile);
+        const photoURL = await getDownloadURL(snapshot.ref);
+        updateData.photoURL = photoURL;
+      }
+
+      await updateProfile(user, updateData);
       await onProfileUpdate();
       setLoading(false);
       onClose();
@@ -98,6 +127,36 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
           </div>
           <p className="text-lg font-medium text-gray-900 dark:text-white">{user?.displayName || user?.email}</p>
 
+          {/* Name Fields */}
+          <div className="w-full space-y-3 mt-4">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                First Name
+              </label>
+              <input
+                id="firstName"
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full px-3 py-2 bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
+                placeholder="Enter your first name"
+              />
+            </div>
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Last Name
+              </label>
+              <input
+                id="lastName"
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full px-3 py-2 bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF8C00] focus:border-transparent"
+                placeholder="Enter your last name"
+              />
+            </div>
+          </div>
+
           <label htmlFor="profile-upload" className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gray-100/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200/80 dark:hover:bg-gray-600/80 transition-colors text-sm font-medium text-gray-700 dark:text-gray-300">
             <Upload className="w-4 h-4" />
             Upload Photo
@@ -113,10 +172,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
 
         <button
           onClick={handleSaveProfile}
-          disabled={!selectedFile || loading}
+          disabled={loading}
           className="w-full flex items-center justify-center gap-3 px-4 py-3 mt-6 bg-[#FF8C00] hover:bg-[#FF6B00] backdrop-blur-md text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Saving...' : 'Save Changes'}
+          {loading ? 'Saving...' : 'Save Profile'}
           <Save className="w-5 h-5" />
         </button>
       </div>

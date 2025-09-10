@@ -83,15 +83,101 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
-  
+
   *::-webkit-scrollbar {
     display: none;
+    width: 0;
+    height: 0;
+    -webkit-appearance: none;
   }
-  
+
   /* Specific scrollbar hiding for textarea and other elements */
   textarea::-webkit-scrollbar,
-  div::-webkit-scrollbar {
-    display: none;
+  div::-webkit-scrollbar,
+  textarea::-webkit-scrollbar-track,
+  div::-webkit-scrollbar-track,
+  textarea::-webkit-scrollbar-thumb,
+  div::-webkit-scrollbar-thumb {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+  /* Safari specific scrollbar hiding */
+  textarea,
+  div {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  textarea::-webkit-scrollbar,
+  textarea::-webkit-scrollbar-track,
+  textarea::-webkit-scrollbar-thumb,
+  textarea::-webkit-scrollbar-track-piece,
+  textarea::-webkit-scrollbar-corner {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+
+
+  /* Specific rules for identified scrollable elements */
+  .flex-1.overflow-y-auto::-webkit-scrollbar,
+  .flex-1.overflow-y-auto::-webkit-scrollbar-track,
+  .flex-1.overflow-y-auto::-webkit-scrollbar-thumb {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+  /* Force hide all scrollbars on scrollable containers */
+  div[class*="overflow-y-auto"],
+  div[class*="overflow-y-scroll"],
+  textarea[class*="overflow-y-auto"] {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  div[class*="overflow-y-auto"]::-webkit-scrollbar,
+  div[class*="overflow-y-scroll"]::-webkit-scrollbar,
+  textarea[class*="overflow-y-auto"]::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+  /* Additional Safari-specific rules */
+  ::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+  /* Hide scrollbars for horizontal scrolling elements */
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-corner {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    -webkit-appearance: none !important;
   }
   
   /* Safari backdrop-filter support */

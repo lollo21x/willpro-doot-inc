@@ -9,9 +9,9 @@ interface ChatInputProps {
   isImageGenerator?: boolean;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({ 
-  onSendMessage, 
-  isLoading = false, 
+export const ChatInput: React.FC<ChatInputProps> = ({
+  onSendMessage,
+  isLoading = false,
   disabled = false,
   multimodalEnabled = false,
   isImageGenerator = false,
@@ -153,7 +153,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 lg:left-80 p-4">
+    <div className="fixed bottom-0 left-0 right-0 lg:left-80 p-4 z-50">
       <div className="max-w-4xl mx-auto">
         {/* Selected Images Preview */}
         {selectedImages.length > 0 && (
@@ -220,11 +220,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                 placeholder-gray-500 dark:placeholder-gray-400
                 font-montserrat
               "
-              style={{ 
+              style={{
                 outline: 'none',
                 boxShadow: 'none',
-                scrollbarWidth: 'none', 
+                scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch',
                 height: '48px'
               }}
               rows={1}

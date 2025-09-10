@@ -168,7 +168,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
         </div>
 
         {/* Models by Provider */}
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 p-6 overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
           <div className="space-y-8">
             {Object.entries(modelsByProvider).map(([provider, models]) => (
               <div key={provider}>

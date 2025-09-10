@@ -8,12 +8,14 @@ interface ModelSelectorProps {
   currentModel: ModelInfo;
   availableModels: ModelInfo[];
   onSelectModel: (modelId: ModelType) => void;
+  onShowAllModels: () => void;
 }
 
 export const ModelSelector: React.FC<ModelSelectorProps> = ({
   currentModel,
   availableModels,
   onSelectModel,
+  onShowAllModels,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showAllModels, setShowAllModels] = useState(false);
@@ -193,10 +195,10 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="
-            flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 
-            backdrop-blur-md border border-gray-300 dark:border-gray-600 
-            rounded-lg hover:bg-gray-50/80 dark:hover:bg-gray-700/80 
-            transition-colors text-sm font-medium text-gray-700 dark:text-gray-300
+            flex items-center gap-2 px-3 py-2 bg-white
+            border border-gray-300
+            rounded-lg hover:bg-gray-50
+            transition-colors text-sm font-medium text-gray-700
           "
           style={{ outline: 'none', boxShadow: 'none' }}
         >
@@ -216,10 +218,10 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
             />
             
             {/* Dropdown Menu */}
-            <div 
+            <div
               className="
                 absolute top-full left-0 mt-2 w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md
-                border border-gray-300 dark:border-gray-600 
+                border border-gray-300 dark:border-gray-600
                 rounded-xl shadow-2xl py-2 z-[50]
               "
               style={{ backdropFilter: 'blur(20px)' }}
@@ -260,11 +262,11 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
               <div className="border-t border-gray-200 dark:border-gray-600 my-2"></div>
 
               {/* All models Button */}
-              <button
-                onClick={() => {
-                  setShowAllModels(true);
-                  setIsOpen(false);
-                }}
+               <button
+                 onClick={() => {
+                   onShowAllModels();
+                   setIsOpen(false);
+                 }}
                 className="
                   w-full flex items-center gap-3 px-4 py-3 text-left transition-colors
                   hover:bg-[#FF8C00]/5 dark:hover:bg-[#FF8C00]/5

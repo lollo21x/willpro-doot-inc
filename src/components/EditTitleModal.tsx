@@ -36,7 +36,7 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Edit chat title
@@ -57,15 +57,6 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
           
           <div className="flex gap-3 mt-4">
             <button
-              type="submit"
-              disabled={!title.trim()}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#BF00FF]/80 hover:bg-[#BF00FF]/90 disabled:bg-gray-400/80 disabled:cursor-not-allowed text-white rounded-lg transition-colors backdrop-blur-md"
-              style={{ outline: 'none', boxShadow: 'none' }}
-            >
-              <Check className="w-4 h-4" />
-              Save
-            </button>
-            <button
               type="button"
               onClick={onCancel}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-500/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors backdrop-blur-md"
@@ -73,6 +64,15 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
             >
               <X className="w-4 h-4" />
               Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!title.trim()}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#FF8C00] hover:bg-[#FF6B00] disabled:bg-gray-400/80 disabled:cursor-not-allowed text-white rounded-lg transition-colors backdrop-blur-md"
+              style={{ outline: 'none', boxShadow: 'none' }}
+            >
+              <Check className="w-4 h-4" />
+              Save
             </button>
           </div>
         </form>

@@ -14,6 +14,7 @@ interface ChatInterfaceProps {
   isImageGenerator?: boolean;
   isReasoningModel?: boolean;
   isCoderModel?: boolean;
+  isDark?: boolean;
 }
 
 const WELCOME_MESSAGES = [
@@ -48,6 +49,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   isImageGenerator = false,
   isReasoningModel = false,
   isCoderModel = false,
+  isDark = false,
 }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
@@ -64,8 +66,10 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     const randomIndex = Math.floor(Math.random() * WELCOME_MESSAGES.length);
     let message = WELCOME_MESSAGES[randomIndex];
     if (user) {
-      const name = user.displayName || user.email?.split('@')[0] || 'there';
-      message = message.replace('[NAME]', name);
+      // Extract only the first name from displayName
+      const fullName = user.displayName || user.email?.split('@')[0] || 'there';
+      const firstName = fullName.split(' ')[0]; // Get only the first word
+      message = message.replace('[NAME]', firstName);
     } else {
       message = message.replace(', [NAME]?', '?');
     }
@@ -74,32 +78,27 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
 
 
+  const getBackgroundStyle = () => {
+    if (isDark) {
+      return { backgroundColor: '#111827' }; // gray-900
+    } else {
+      return { backgroundColor: '#FFF3E3' };
+    }
+  };
+
   return (
     <div
       className="flex flex-col h-full relative"
       style={{
-        zIndex: 1,
-        backgroundColor: '#FFF3E3',
+        zIndex: 0,
+        ...getBackgroundStyle(),
       }}
     >
-      {/* Background Image Overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: 'url(https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757425365/bg_oqntof.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          opacity: messages.length === 0 ? 1 : 0,
-          transition: 'opacity 1.5s ease-in-out',
-          zIndex: 0,
-        }}
-      />
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 pb-24 relative z-10">
+      <div className="flex-1 overflow-y-auto px-6 py-4 pb-24 relative z-10" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <h1 className="text-4xl font-bold text-white mb-8 max-w-2xl leading-tight">
+            <h1 className={`text-4xl font-bold mb-8 max-w-2xl leading-tight ${isDark ? 'text-white' : 'text-black'}`}>
               {welcomeMessage}
             </h1>
           </div>
@@ -156,9 +155,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       </div>
 
       {/* Input - Now floating with blur */}
-      <ChatInput 
-        onSendMessage={onSendMessage} 
-        isLoading={isLoading} 
+      <ChatInput
+        onSendMessage={onSendMessage}
+        isLoading={isLoading}
         multimodalEnabled={multimodalEnabled}
         isImageGenerator={isImageGenerator}
       />

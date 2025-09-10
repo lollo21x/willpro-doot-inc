@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={isDark ? { backgroundImage: 'linear-gradient(to bottom, url(https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757427291/bg2_ffo21q.png) 0%, #2C2C2C 100%)', backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar
         conversations={conversations}
         activeConversationId={activeConversationId}
@@ -91,7 +91,7 @@ function App() {
             >
               <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
             </button>
-            
+
             <ModelSelector
               currentModel={currentModel}
               availableModels={availableModels}
@@ -122,17 +122,17 @@ function App() {
         </div>
 
         <div className="flex-1 min-h-0" style={{ position: 'relative', zIndex: 1 }}>
-          <ChatInterface
-            messages={activeConversation?.messages || []}
-            onSendMessage={handleSendMessage}
-            onRegenerateMessage={handleRegenerateMessage}
-            isLoading={isLoading}
-            conversationTitle={activeConversation?.title || 'New chat'}
-            multimodalEnabled={currentModel.multimodal}
-            isImageGenerator={currentModel.isImageGenerator}
-            isReasoningModel={currentModel.isReasoning}
-            isCoderModel={currentModel.isCoder}
-          />
+           <ChatInterface
+             messages={activeConversation?.messages || []}
+             onSendMessage={handleSendMessage}
+             onRegenerateMessage={handleRegenerateMessage}
+             isLoading={isLoading}
+             multimodalEnabled={currentModel.multimodal}
+             isImageGenerator={currentModel.isImageGenerator}
+             isReasoningModel={currentModel.isReasoning}
+             isCoderModel={currentModel.isCoder}
+             isDark={isDark}
+           />
         </div>
       </div>
 

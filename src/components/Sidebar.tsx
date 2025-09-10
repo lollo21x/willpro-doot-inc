@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
- import { Plus, MessageCircle, X, Info } from 'lucide-react';
+ import { Plus, MessageCircle, Info, X } from 'lucide-react';
 import { Conversation } from '../types/chat';
 import { ContextMenu } from './ContextMenu';
 import { EditTitleModal } from './EditTitleModal';
@@ -123,7 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <div className="flex-1 overflow-y-auto px-4 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
             <style jsx>{`
               div::-webkit-scrollbar {
                 display: none;
@@ -157,13 +157,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
            </div>
 
            <div className="absolute bottom-4 right-4">
-             <a
-               href="https://privacy.dootinc.dpdns.org"
-               target="_blank"
-               rel="noopener noreferrer"
-               className="flex items-center justify-center w-10 h-10 bg-white/80 hover:bg-white/90 text-gray-900 rounded-lg backdrop-blur-md transition-colors"
-               style={{ WebkitBackdropFilter: 'blur(12px)' }}
-             >
+              <a
+                href="https://privacy.dootinc.dpdns.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-10 h-10 bg-white/80 hover:bg-white/90 dark:bg-gray-900/80 dark:hover:bg-gray-800/90 text-gray-900 dark:text-gray-300 rounded-lg backdrop-blur-md transition-colors"
+                style={{ WebkitBackdropFilter: 'blur(12px)' }}
+              >
                <Info className="w-5 h-5" />
              </a>
            </div>
