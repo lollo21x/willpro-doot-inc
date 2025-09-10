@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={isDark ? { backgroundImage: 'linear-gradient(to bottom, url(https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757427291/bg2_ffo21q.png) 0%, #2C2C2C 100%)', backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
       <Sidebar
         conversations={conversations}
         activeConversationId={activeConversationId}

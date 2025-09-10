@@ -67,7 +67,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
       <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-md max-h-[85vh] overflow-hidden flex flex-col my-auto p-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">

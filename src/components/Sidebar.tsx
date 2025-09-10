@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, MessageCircle, X } from 'lucide-react';
+ import { Plus, MessageCircle, X, Info } from 'lucide-react';
 import { Conversation } from '../types/chat';
 import { ContextMenu } from './ContextMenu';
 import { EditTitleModal } from './EditTitleModal';
@@ -74,9 +74,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
           onClick={onToggle}
+          style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
         />
       )}
       
@@ -84,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         fixed lg:relative inset-y-0 left-0 z-30 w-80 bg-white/80 dark:bg-gray-900/80
         border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-200 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+      `} style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
@@ -152,10 +153,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 </button>
               ))}
-            </div>
-          </div>
-        </div>
-      </div>
+             </div>
+           </div>
+
+           <div className="absolute bottom-4 right-4">
+             <a
+               href="https://privacy.dootinc.dpdns.org"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="flex items-center justify-center w-10 h-10 bg-white/80 hover:bg-white/90 text-gray-900 rounded-lg backdrop-blur-md transition-colors"
+               style={{ WebkitBackdropFilter: 'blur(12px)' }}
+             >
+               <Info className="w-5 h-5" />
+             </a>
+           </div>
+         </div>
+       </div>
 
       {contextMenu && (
         <ContextMenu
