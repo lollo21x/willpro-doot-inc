@@ -14,20 +14,39 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
 }) => {
   const [title, setTitle] = useState(currentTitle);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
+    // Trigger animation after component mounts
+    const timer = setTimeout(() => setIsVisible(true), 10);
+
     if (inputRef.current) {
       inputRef.current.focus();
       inputRef.current.select();
     }
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onCancel();
+    }, 200); // Match animation duration
+  };
+
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      onSave(title.trim());
+      setIsClosing(true);
+      setTimeout(() => {
+        onSave(title.trim());
+      }, 200);
     }
   };
+
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -36,13 +55,25 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl p-6 w-full max-w-md">
+    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-200 ease-out ${
+      isClosing
+        ? 'opacity-0'
+        : isVisible
+          ? 'opacity-100'
+          : 'opacity-0'
+    }`} style={{ WebkitBackdropFilter: 'blur(12px)' }}>
+      <div className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl p-6 w-full max-w-md transition-all duration-200 ease-out ${
+        isClosing
+          ? 'opacity-0 scale-95'
+          : isVisible
+            ? 'opacity-100 scale-100'
+            : 'opacity-0 scale-95'
+      }`}>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Edit chat title
         </h3>
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSave}>
           <input
             ref={inputRef}
             type="text"
@@ -58,7 +89,7 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
           <div className="flex gap-3 mt-4">
             <button
               type="button"
-              onClick={onCancel}
+              onClick={handleClose}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-500/80 hover:bg-gray-600/80 text-white rounded-lg transition-colors backdrop-blur-md"
               style={{ outline: 'none', boxShadow: 'none' }}
             >

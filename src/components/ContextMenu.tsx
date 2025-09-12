@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Edit3, Trash2 } from 'lucide-react';
 
 interface ContextMenuProps {
@@ -17,24 +17,37 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   onClose,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
+    // Trigger animation after component mounts
+    const timer = setTimeout(() => setIsVisible(true), 10);
+
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        onClose();
+        handleClose();
       }
     };
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        handleClose();
       }
+    };
+
+    const handleClose = () => {
+      setIsClosing(true);
+      setTimeout(() => {
+        onClose();
+      }, 150); // Match animation duration
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
 
     return () => {
+      clearTimeout(timer);
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
@@ -43,16 +56,27 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl shadow-lg py-2 min-w-[160px]"
+      className={`fixed z-50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl py-2 min-w-[160px] transition-all duration-200 ease-out ${
+        isClosing
+          ? 'opacity-0 scale-95'
+          : isVisible
+            ? 'opacity-100 scale-100'
+            : 'opacity-0 scale-95'
+      }`}
       style={{
         left: x,
         top: y,
+        transformOrigin: 'top left',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       }}
     >
       <button
         onClick={() => {
-          onEdit();
-          onClose();
+          setIsClosing(true);
+          setTimeout(() => {
+            onEdit();
+            onClose();
+          }, 150);
         }}
         className="w-full flex items-center gap-3 px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 transition-colors"
         style={{ outline: 'none', boxShadow: 'none' }}
@@ -62,8 +86,11 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       </button>
       <button
         onClick={() => {
-          onDelete();
-          onClose();
+          setIsClosing(true);
+          setTimeout(() => {
+            onDelete();
+            onClose();
+          }, 150);
         }}
         className="w-full flex items-center gap-3 px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50/80 dark:hover:bg-red-900/20 transition-colors"
         style={{ outline: 'none', boxShadow: 'none' }}

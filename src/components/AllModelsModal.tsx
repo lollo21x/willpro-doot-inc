@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Eye, Brain, Sparkles, Code } from 'lucide-react';
 import { ModelType, ModelInfo } from '../types/chat';
@@ -16,6 +16,29 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
   onClose,
 }) => {
   const modelsByProvider = getModelsByProvider();
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    // Trigger animation after component mounts
+    const timer = setTimeout(() => setIsVisible(true), 10);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 200); // Match animation duration
+  };
+
+  const handleModelSelect = (modelId: any) => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onSelectModel(modelId);
+      onClose();
+    }, 200);
+  };
 
   const getModelIcon = (model: ModelInfo, isDark: boolean) => {
     const provider = model.id.split('/')[0];
@@ -150,16 +173,28 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
   };
 
   const modalContent = (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
-      <div 
-        className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col my-auto"
+    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-200 ease-out ${
+      isClosing
+        ? 'opacity-0'
+        : isVisible
+          ? 'opacity-100'
+          : 'opacity-0'
+    }`} style={{ WebkitBackdropFilter: 'blur(12px)' }}>
+      <div
+        className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col my-auto transition-all duration-200 ease-out ${
+          isClosing
+            ? 'opacity-0 scale-95'
+            : isVisible
+              ? 'opacity-100 scale-100'
+              : 'opacity-0 scale-95'
+        }`}
       >
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-600">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             All models
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-700/80 transition-colors"
             style={{ outline: 'none', boxShadow: 'none' }}
           >
@@ -186,7 +221,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
                   {models.map((model) => (
                     <button
                       key={model.id}
-                      onClick={() => onSelectModel(model.id)}
+                      onClick={() => handleModelSelect(model.id)}
                       className={`
                         p-4 rounded-xl border text-left transition-all duration-200
                         hover:shadow-lg hover:scale-[1.02]

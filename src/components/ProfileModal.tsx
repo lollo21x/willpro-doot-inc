@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Image as ImageIcon, Upload, Save, User } from 'lucide-react';
 import { auth, storage } from '../services/firebase';
 import { updateProfile } from 'firebase/auth';
@@ -12,6 +12,8 @@ interface ProfileModalProps {
 export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUpdate }) => {
   const user = auth.currentUser;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(user?.photoURL || null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -27,6 +29,19 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
     const parts = name.split(' ');
     return parts.slice(1).join(' ') || '';
   });
+
+  useEffect(() => {
+    // Trigger animation after component mounts
+    const timer = setTimeout(() => setIsVisible(true), 10);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 200); // Match animation duration
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -87,7 +102,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
       await updateProfile(user, updateData);
       await onProfileUpdate();
       setLoading(false);
-      onClose();
+      handleClose();
     } catch (err: any) {
       console.error('Error updating profile:', err);
       setError(`Failed to save profile: ${err.message || 'Unknown error'}`);
@@ -96,14 +111,26 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose, onProfileUp
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4" style={{ WebkitBackdropFilter: 'blur(12px)' }}>
-      <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-md max-h-[85vh] overflow-hidden flex flex-col my-auto p-6">
+    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-200 ease-out ${
+      isClosing
+        ? 'opacity-0'
+        : isVisible
+          ? 'opacity-100'
+          : 'opacity-0'
+    }`} style={{ WebkitBackdropFilter: 'blur(12px)' }}>
+      <div className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-md max-h-[85vh] overflow-hidden flex flex-col my-auto p-6 transition-all duration-200 ease-out ${
+        isClosing
+          ? 'opacity-0 scale-95'
+          : isVisible
+            ? 'opacity-100 scale-100'
+            : 'opacity-0 scale-95'
+      }`}>
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
             <ImageIcon className="w-5 h-5" /> Profile
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-2 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-700/80 transition-colors"
             style={{ outline: 'none', boxShadow: 'none' }}
           >

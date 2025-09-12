@@ -41,7 +41,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      const scrollHeight = textareaRef.current.scrollHeight;
+      const maxHeight = 128; // max-h-32 = 128px
+
+      if (scrollHeight <= maxHeight) {
+        textareaRef.current.style.height = `${scrollHeight}px`;
+        textareaRef.current.style.overflowY = 'hidden';
+      } else {
+        textareaRef.current.style.height = `${maxHeight}px`;
+        textareaRef.current.style.overflowY = 'auto';
+      }
     }
   }, [message]);
 
@@ -160,10 +169,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           <div className="mb-3 flex flex-wrap gap-2">
             {selectedImages.map((image, index) => (
               <div key={index} className="relative group">
-                <img
+                 <img
                   src={image}
                   alt={`Upload ${index + 1}`}
-                  className="w-20 h-20 object-cover rounded-lg border border-gray-300 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md"
+                  className="w-20 h-20 object-cover rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
                 />
                 <button
                   onClick={() => handleRemoveImage(index)}
@@ -181,7 +190,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
           </div>
         )}
 
-        <div className="flex gap-3 items-end">
+        <div className="flex gap-3 items-start">
           {/* Image Upload Button - Solo se multimodale e NON image generator */}
           {multimodalEnabled && !isImageGenerator && (
             <button
@@ -189,12 +198,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               onClick={triggerFileSelect}
               disabled={disabled || isLoading}
               className={`
-                flex-shrink-0 w-12 h-12 rounded-xl backdrop-blur-md
+                flex-shrink-0 w-12 h-12 rounded-xl
                 flex items-center justify-center transition-all duration-200
-                transform -translate-y-1.5
                 ${disabled || isLoading
-                  ? 'bg-gray-400/80 dark:bg-gray-600/80 cursor-not-allowed text-gray-500' 
-                  : 'bg-gray-500/80 dark:bg-gray-600/80 hover:bg-gray-600/80 dark:hover:bg-gray-500/80 text-white'
+                  ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-gray-500'
+                  : 'bg-gray-500 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-500 text-white'
                 }
               `}
               style={{ outline: 'none', boxShadow: 'none' }}
@@ -213,21 +221,21 @@ export const ChatInput: React.FC<ChatInputProps> = ({
               placeholder={getPlaceholder()}
               disabled={disabled || isLoading}
               className="
-                w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 
-                bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white backdrop-blur-md
+                w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                 disabled:cursor-not-allowed
                 resize-none min-h-[48px] max-h-32 overflow-y-auto
                 placeholder-gray-500 dark:placeholder-gray-400
-                font-montserrat
+                font-montserrat transition-colors duration-200
               "
-              style={{
-                outline: 'none',
-                boxShadow: 'none',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                WebkitOverflowScrolling: 'touch',
-                height: '48px'
-              }}
+               style={{
+                 outline: 'none',
+                 boxShadow: 'none',
+                 scrollbarWidth: 'none',
+                 msOverflowStyle: 'none',
+                 WebkitOverflowScrolling: 'touch',
+                 height: '48px'
+               }}
               rows={1}
             />
           </div>
@@ -237,18 +245,17 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             onClick={handleSubmit}
             disabled={isButtonDisabled}
             className={`
-              flex-shrink-0 w-12 h-12 rounded-xl backdrop-blur-md
-              flex items-center justify-center text-white transition-all duration-200
-              transform -translate-y-1.5
-              ${isButtonDisabled 
-                ? 'bg-gray-400/80 dark:bg-gray-600/80 cursor-not-allowed' 
+              flex-shrink-0 w-12 h-12 rounded-xl
+              flex items-center justify-center text-white
+              ${isButtonDisabled
+                ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
                 : 'bg-[#FF8C00] hover:bg-[#FF6B00]'
               }
             `}
             style={{ outline: 'none', boxShadow: 'none' }}
           >
             {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" style={{ animationDuration: '0.8s' }} />
             ) : (
               <ArrowUp className="w-5 h-5" />
             )}

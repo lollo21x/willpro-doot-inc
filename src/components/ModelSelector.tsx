@@ -19,7 +19,19 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showAllModels, setShowAllModels] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+      setTimeout(() => setIsExpanded(true), 10);
+    } else {
+      setIsExpanded(false);
+      setTimeout(() => setIsVisible(false), 300);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -195,10 +207,10 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="
-            flex items-center gap-2 px-3 py-2 bg-white
-            border border-gray-300
-            rounded-lg hover:bg-gray-50
-            transition-colors text-sm font-medium text-gray-700
+            flex items-center gap-2 px-3 py-2 bg-transparent
+            border border-gray-300 dark:border-gray-600
+            rounded-lg hover:bg-gray-200/80 dark:hover:bg-gray-700/80
+            transition-colors text-sm font-medium text-gray-700 dark:text-white
           "
           style={{ outline: 'none', boxShadow: 'none' }}
         >
@@ -209,22 +221,27 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
           <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
-        {isOpen && (
+        {isVisible && (
           <>
             {/* Overlay */}
-            <div 
-              className="fixed inset-0 bg-transparent z-40" 
+            <div
+              className={`fixed inset-0 bg-transparent z-40 transition-opacity duration-300 ease-out ${
+                isExpanded ? 'opacity-100' : 'opacity-0'
+              }`}
               onClick={() => setIsOpen(false)}
             />
-            
+
             {/* Dropdown Menu */}
             <div
-              className="
-                absolute top-full left-0 mt-2 w-96 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md
+              className={`
+                absolute top-full left-0 mt-2 w-96 bg-white dark:bg-gray-800
                 border border-gray-300 dark:border-gray-600
-                rounded-xl shadow-2xl py-2 z-[50]
-              "
-              style={{ backdropFilter: 'blur(20px)' }}
+                rounded-xl shadow-2xl py-2 z-[50] transition-all duration-300 ease-out
+                ${isExpanded
+                  ? 'opacity-100 scale-100'
+                  : 'opacity-0 scale-95'
+                }
+              `}
             >
               {/* Primary Models */}
               {getPrimaryModels().map((model) => (
