@@ -33,7 +33,7 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
     setIsClosing(true);
     setTimeout(() => {
       onCancel();
-    }, 200); // Match animation duration
+    }, 120); // Match animation duration
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -42,7 +42,7 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
       setIsClosing(true);
       setTimeout(() => {
         onSave(title.trim());
-      }, 200);
+      }, 120);
     }
   };
 
@@ -55,14 +55,14 @@ export const EditTitleModal: React.FC<EditTitleModalProps> = ({
   };
 
   return (
-    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-200 ease-out ${
+    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-120 ease-out ${
       isClosing
         ? 'opacity-0'
         : isVisible
           ? 'opacity-100'
           : 'opacity-0'
     }`} style={{ WebkitBackdropFilter: 'blur(12px)' }}>
-      <div className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl p-6 w-full max-w-md transition-all duration-200 ease-out ${
+      <div className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-xl p-6 w-full max-w-md transition-all duration-120 ease-out ${
         isClosing
           ? 'opacity-0 scale-95'
           : isVisible

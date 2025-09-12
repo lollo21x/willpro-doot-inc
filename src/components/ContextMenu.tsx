@@ -19,6 +19,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   const menuRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [adjustedPosition, setAdjustedPosition] = useState({ left: x, top: y });
 
   useEffect(() => {
     // Trigger animation after component mounts
@@ -43,6 +44,41 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       }, 150); // Match animation duration
     };
 
+    // Adjust position to keep menu within viewport
+    const adjustPosition = () => {
+      if (menuRef.current) {
+        const rect = menuRef.current.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const menuWidth = rect.width || 160; // fallback to min-width
+        const menuHeight = rect.height || 80; // approximate height
+
+        let newLeft = x;
+        let newTop = y;
+
+        // Adjust horizontal position
+        if (x + menuWidth > viewportWidth) {
+          newLeft = viewportWidth - menuWidth - 10; // 10px margin
+        }
+        if (newLeft < 10) {
+          newLeft = 10;
+        }
+
+        // Adjust vertical position
+        if (y + menuHeight > viewportHeight) {
+          newTop = viewportHeight - menuHeight - 10;
+        }
+        if (newTop < 10) {
+          newTop = 10;
+        }
+
+        setAdjustedPosition({ left: newLeft, top: newTop });
+      }
+    };
+
+    // Adjust position after render
+    setTimeout(adjustPosition, 0);
+
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleEscape);
 
@@ -51,7 +87,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [onClose]);
+  }, [onClose, x, y]);
 
   return (
     <div
@@ -64,8 +100,8 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
             : 'opacity-0 scale-95'
       }`}
       style={{
-        left: x,
-        top: y,
+        left: adjustedPosition.left,
+        top: adjustedPosition.top,
         transformOrigin: 'top left',
         boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       }}

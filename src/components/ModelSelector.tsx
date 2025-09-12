@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Zap, Grid3X3, Eye, Brain, Sparkles, Code } from 'lucide-react';
 import { ModelType, ModelInfo } from '../types/chat';
-import { AVAILABLE_MODELS, getPrimaryModels, getSecondaryModels } from '../services/models';
+import { getPrimaryModels } from '../services/models';
 import { AllModelsModal } from './AllModelsModal';
 
 interface ModelSelectorProps {
@@ -13,7 +13,6 @@ interface ModelSelectorProps {
 
 export const ModelSelector: React.FC<ModelSelectorProps> = ({
   currentModel,
-  availableModels,
   onSelectModel,
   onShowAllModels,
 }) => {
@@ -21,12 +20,29 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
   const [showAllModels, setShowAllModels] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState<'below' | 'above'>('below');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
       setTimeout(() => setIsExpanded(true), 10);
+
+      // Calculate dropdown position
+      setTimeout(() => {
+        if (buttonRef.current) {
+          const buttonRect = buttonRef.current.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          const estimatedDropdownHeight = 400; // approximate height
+
+          if (buttonRect.bottom + estimatedDropdownHeight > viewportHeight) {
+            setDropdownPosition('above');
+          } else {
+            setDropdownPosition('below');
+          }
+        }
+      }, 0);
     } else {
       setIsExpanded(false);
       setTimeout(() => setIsVisible(false), 300);
@@ -205,6 +221,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
     <>
       <div className="relative" ref={dropdownRef}>
         <button
+          ref={buttonRef}
           onClick={() => setIsOpen(!isOpen)}
           className="
             flex items-center gap-2 px-3 py-2 bg-transparent
@@ -233,8 +250,9 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
 
             {/* Dropdown Menu */}
             <div
+              ref={dropdownRef}
               className={`
-                absolute top-full left-0 mt-2 w-96 bg-white dark:bg-gray-800
+                absolute ${dropdownPosition === 'below' ? 'top-full' : 'bottom-full'} left-0 ${dropdownPosition === 'below' ? 'mt-2' : 'mb-2'} w-96 bg-white dark:bg-gray-800
                 border border-gray-300 dark:border-gray-600
                 rounded-xl shadow-2xl py-2 z-[50] transition-all duration-300 ease-out
                 ${isExpanded

@@ -29,7 +29,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
     setIsClosing(true);
     setTimeout(() => {
       onClose();
-    }, 200); // Match animation duration
+    }, 120); // Match animation duration
   };
 
   const handleModelSelect = (modelId: any) => {
@@ -37,7 +37,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
     setTimeout(() => {
       onSelectModel(modelId);
       onClose();
-    }, 200);
+    }, 120);
   };
 
   const getModelIcon = (model: ModelInfo, isDark: boolean) => {
@@ -173,7 +173,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
   };
 
   const modalContent = (
-    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-200 ease-out ${
+    <div className={`fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 transition-opacity duration-120 ease-out ${
       isClosing
         ? 'opacity-0'
         : isVisible
@@ -181,7 +181,7 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
           : 'opacity-0'
     }`} style={{ WebkitBackdropFilter: 'blur(12px)' }}>
       <div
-        className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col my-auto transition-all duration-200 ease-out ${
+        className={`bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl w-full max-w-4xl max-h-[85vh] overflow-hidden flex flex-col my-auto transition-all duration-120 ease-out ${
           isClosing
             ? 'opacity-0 scale-95'
             : isVisible
