@@ -67,14 +67,13 @@ export const AVAILABLE_MODELS: ModelInfo[] = [
     isPrimary: false,
     isBase: true,
   },
-  {
-    id: 'google/gemini-2.0-flash-exp:free',
-    name: 'Gemini 2.0 Flash Experimental',
-    description: 'Google Gemini 2.0 Flash experimental model',
-    multimodal: true,
-    isPrimary: false,
-    isBase: true,
-  },
+   {
+     id: 'google/gemini-2.0-flash-exp:free',
+     name: 'Gemini 2.0 Flash Experimental',
+     description: 'Google Gemini 2.0 Flash experimental model',
+     multimodal: true,
+     isPrimary: false,
+   },
   {
     id: 'moonshotai/kimi-k2:free',
     name: 'Kimi K2',
@@ -83,14 +82,14 @@ export const AVAILABLE_MODELS: ModelInfo[] = [
     isPrimary: false,
     isBase: true,
   },
-  {
-    id: 'moonshotai/kimi-vl-a3b-thinking:free',
-    name: 'Kimi VL A3B Thinking',
-    description: 'Moonshot AI Kimi VL A3B Thinking model',
-    multimodal: true,
-    isPrimary: false,
-    isReasoning: true,
-  },
+   {
+     id: 'moonshotai/kimi-vl-a3b-thinking:free',
+     name: 'Kimi VL A3B Thinking',
+     description: 'Moonshot AI Kimi VL A3B Thinking model',
+     multimodal: false,
+     isPrimary: false,
+     isReasoning: true,
+   },
   {
     id: 'z-ai/glm-4.5-air:free',
     name: 'GLM-4.5 Air',
@@ -147,14 +146,13 @@ export const AVAILABLE_MODELS: ModelInfo[] = [
     isPrimary: false,
     isReasoning: true,
   },
-  {
-    id: 'meta-llama/llama-3.2-11b-vision-instruct:free',
-    name: 'Llama 3.2',
-    description: 'Meta Llama 3.2 11B with vision capabilities',
-    multimodal: true,
-    isPrimary: false,
-    isBase: true,
-  },
+   {
+     id: 'meta-llama/llama-3.2-11b-vision-instruct:free',
+     name: 'Llama 3.2',
+     description: 'Meta Llama 3.2 11B with vision capabilities',
+     multimodal: true,
+     isPrimary: false,
+   },
   {
     id: 'mistralai/mistral-nemo:free',
     name: 'Mistral Nemo',
@@ -219,15 +217,47 @@ export const AVAILABLE_MODELS: ModelInfo[] = [
     isPrimary: false,
     isBase: true,
   },
-  {
-    id: 'deepseek/deepseek-chat-v3-0324:free',
-    name: 'DeepSeek V3',
-    description: 'DeepSeek V3 model optimized for conversations',
-    multimodal: false,
-    isPrimary: false,
-    isBase: true,
-  },
-];
+   {
+     id: 'deepseek/deepseek-chat-v3-0324:free',
+     name: 'DeepSeek V3',
+     description: 'DeepSeek V3 model optimized for conversations',
+     multimodal: false,
+     isPrimary: false,
+     isBase: true,
+   },
+   {
+     id: 'meta-llama/llama-3.1-405b-instruct:free',
+     name: 'Llama 3.1 405B',
+     description: 'Meta Llama 3.1 405B instruction-tuned model',
+     multimodal: false,
+     isPrimary: false,
+     isBase: true,
+   },
+   {
+     id: 'meta-llama/llama-3.2-3b-instruct:free',
+     name: 'Llama 3.2 3B',
+     description: 'Meta Llama 3.2 3B instruction-tuned model',
+     multimodal: false,
+     isPrimary: false,
+     isBase: true,
+   },
+   {
+     id: 'meta-llama/llama-3.3-8b-instruct:free',
+     name: 'Llama 3.3 8B',
+     description: 'Meta Llama 3.3 8B instruction-tuned model',
+     multimodal: false,
+     isPrimary: false,
+     isBase: true,
+   },
+   {
+     id: 'meta-llama/llama-3.3-70b-instruct:free',
+     name: 'Llama 3.3 70B',
+     description: 'Meta Llama 3.3 70B instruction-tuned model',
+     multimodal: false,
+     isPrimary: false,
+     isBase: true,
+   },
+ ];
 
 export const getPrimaryModels = (): ModelInfo[] => {
   return AVAILABLE_MODELS.filter(model => model.isPrimary);
