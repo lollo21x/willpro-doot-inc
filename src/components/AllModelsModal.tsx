@@ -363,12 +363,12 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
                         </div>
                        </button>
                        {modelStatsUrls[model.id] && (
-                         <button
-                           onClick={(e) => handleOpenStats(model, e)}
-                           className={`absolute top-2 right-2 p-1.5 rounded-lg ${currentModel.id === model.id ? 'bg-white' : 'bg-gray-100/80 dark:bg-gray-700/80'} hover:bg-gray-200/80 dark:hover:bg-gray-600/80 group-hover:scale-110 transition-all duration-200`}
-                           style={{ outline: 'none', boxShadow: 'none' }}
-                           title="View statistics"
-                         >
+                          <button
+                            onClick={(e) => handleOpenStats(model, e)}
+                            className={`absolute top-2 right-2 p-1.5 rounded-lg ${currentModel.id === model.id ? 'bg-white dark:bg-gray-700' : 'bg-gray-100/80 dark:bg-gray-700/80'} hover:bg-gray-200/80 dark:hover:bg-gray-600/80 group-hover:scale-110 transition-all duration-200`}
+                            style={{ outline: 'none', boxShadow: 'none' }}
+                            title="View statistics"
+                          >
                            <TrendingUp className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                          </button>
                        )}

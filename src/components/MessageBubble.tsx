@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { User, Clock, AlertCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import { Message } from '../types/chat';
 import { MessageActions } from './MessageActions';
 import { ImageActions } from './ImageActions';
+import { CodeBlock } from './CodeBlock';
 import { useAuth } from '../hooks/useAuth';
 
 // Function to format reasoning content from DeepSeek R1
@@ -44,10 +47,10 @@ interface MessageBubbleProps {
   isImageGenerator?: boolean;
 }
 
-export const MessageBubble: React.FC<MessageBubbleProps> = ({ 
-  message, 
+export const MessageBubble: React.FC<MessageBubbleProps> = ({
+  message,
   onRegenerate,
-  isImageGenerator = false 
+  isImageGenerator = false
 }) => {
   const isUser = message.sender === 'user';
   const [imageError, setImageError] = useState(false);
@@ -178,21 +181,44 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         {/* Text Content - Only show if there's no generated image OR if it's a user message */}
         {message.content && (!message.generatedImage || isUser) && (
           <>
-            <div className={`
-              inline-block px-4 py-3 rounded-2xl backdrop-blur-md
-              ${isUser
-                ? 'bg-[#FF8C00]/80 text-white rounded-br-md'
-                : 'bg-white text-gray-900 rounded-bl-md'
-              }
-            `}>
+             <div className={`
+               inline-block px-4 py-3 rounded-2xl backdrop-blur-md
+               ${isUser
+                 ? 'bg-[#FF8C00]/80 text-white rounded-br-md'
+                 : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-md'
+               }
+             `}>
               {isUser ? (
                 <p className="text-sm leading-relaxed whitespace-pre-wrap">
                   {message.content}
                 </p>
               ) : (
-                <div className="text-sm leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-900 dark:prose-p:text-white prose-strong:text-gray-900 dark:prose-strong:text-white prose-em:text-gray-700 dark:prose-em:text-gray-300 prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-code:bg-gray-100 dark:prose-code:bg-gray-700 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-100 dark:prose-pre:bg-gray-700 prose-pre:text-gray-900 dark:prose-pre:text-white prose-h1:text-xl prose-h1:font-bold prose-h2:text-lg prose-h2:font-bold prose-h3:text-base prose-h3:font-bold prose-h4:text-sm prose-h4:font-bold prose-h5:text-sm prose-h5:font-semibold prose-h6:text-sm prose-h6:font-semibold">
-                  <ReactMarkdown>{formatReasoningContent(message.content)}</ReactMarkdown>
-                </div>
+                 <div className="text-sm leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-900 dark:prose-p:text-white prose-strong:text-gray-900 dark:prose-strong:text-white prose-em:text-gray-700 dark:prose-em:text-gray-300 prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-code:bg-gray-100 dark:prose-code:bg-gray-700 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-100 dark:prose-pre:bg-gray-700 prose-pre:text-gray-900 dark:prose-pre:text-white prose-h1:text-xl prose-h1:font-bold prose-h2:text-lg prose-h2:font-bold prose-h3:text-base prose-h3:font-bold prose-h4:text-sm prose-h4:font-bold prose-h5:text-sm prose-h5:font-semibold prose-h6:text-sm prose-h6:font-semibold">
+                   <ReactMarkdown
+                     remarkPlugins={[remarkGfm]}
+                     rehypePlugins={[rehypeHighlight]}
+                     components={{
+                       // @ts-ignore - Complex typing for ReactMarkdown components
+                       pre: ({ children, ...props }: any) => {
+                         // Check if children contains a code element with language class
+                         const child = React.Children.toArray(children)[0] as any;
+                         if (child?.type === 'code' && child?.props?.className?.includes('language-')) {
+                           const match = /language-(\w+)/.exec(child.props.className || '');
+                           if (match) {
+                             return (
+                               <CodeBlock language={match[1]}>
+                                 {String(child.props.children).replace(/\n$/, '')}
+                               </CodeBlock>
+                             );
+                           }
+                         }
+                         return <pre className="bg-gray-100 dark:bg-gray-700 p-4 rounded overflow-x-auto" {...props}>{children}</pre>;
+                       }
+                     }}
+                   >
+                     {formatReasoningContent(message.content)}
+                   </ReactMarkdown>
+                 </div>
               )}
             </div>
             
