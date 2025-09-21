@@ -122,7 +122,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   />
                 </div>
                 <div className="flex-1 max-w-3xl">
-                   <div className="inline-block px-4 py-3 bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-md">
+                   <div className="inline-block px-4 py-3 bg-white dark:bg-white rounded-2xl rounded-bl-md">
                     {isReasoningModel ? (
                       <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                         <Brain className="w-4 h-4 text-black dark:text-white animate-pulse" />

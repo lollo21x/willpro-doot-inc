@@ -201,18 +201,29 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
             className="w-4 h-4"
           />
         );
-      case 'openrouter':
-        return (
-          <img 
-            src={isDark 
-              ? "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164086/OpenRouter_dark_yzpbfh.svg"
-              : "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164087/OpenRouter_light_pqiaok.svg"
-            }
-            alt="OpenRouter"
-            className="w-4 h-4"
-          />
-        );
-      default:
+       case 'openrouter':
+         return (
+           <img
+             src={isDark
+               ? "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164086/OpenRouter_dark_yzpbfh.svg"
+               : "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164087/OpenRouter_light_pqiaok.svg"
+             }
+             alt="OpenRouter"
+             className="w-4 h-4"
+           />
+         );
+       case 'x-ai':
+         return (
+           <img
+             src={isDark
+               ? "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1758453401/xAI_Grok__dark_n69hwt.svg"
+               : "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1758453402/xAI_Grok__light_piczyy.svg"
+             }
+             alt="xAI"
+             className="w-6 h-6"
+           />
+         );
+       default:
         return <Zap className="w-4 h-4 text-[#FF8C00]" />;
     }
   };

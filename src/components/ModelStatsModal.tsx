@@ -81,9 +81,9 @@ export const ModelStatsModal: React.FC<ModelStatsModalProps> = ({
             : 'opacity-0 scale-95'
       }`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {modelName} Statistics
-          </h3>
+           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+             {modelName} Uptime
+           </h3>
           <button
             onClick={handleClose}
             className="p-2 rounded-lg hover:bg-gray-100/80 dark:hover:bg-gray-700/80 transition-colors"
@@ -99,7 +99,7 @@ export const ModelStatsModal: React.FC<ModelStatsModalProps> = ({
             width={embedDimensions.width}
             height={embedDimensions.height}
             className="border-0 rounded-lg"
-            title={`${modelName} Statistics`}
+             title={`${modelName} Uptime`}
             allowFullScreen
           />
         </div>

@@ -52,9 +52,8 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
     'mistralai/mistral-small-3.2-24b-instruct:free': 'https://us5.datadoghq.com/graph/embed?token=8304a5e9c2396f3dd577b122d29c2b3d3f97e4a49af3873bc8ef42cac1b4cb71&legend=true&height=318&width=974',
     'meta-llama/llama-4-scout:free': 'https://us5.datadoghq.com/graph/embed?token=acdaea1302819adb69065457b850a535b6e0f2be10f6957f3276968a50c18e4b&legend=true&height=318&width=974',
     'meta-llama/llama-4-maverick:free': 'https://us5.datadoghq.com/graph/embed?token=fa0e41c5f3b05f7db99fc0627ec5e3f40493f55608c6f590f50b05c349c17750&legend=true&height=318&width=974',
-    'openrouter/sonoma-dusk-alpha': 'https://us5.datadoghq.com/graph/embed?token=be2231cf0e4ec847584d3c06a96c8386c9c1feca7819f891b023630566fa45bb&legend=true&height=318&width=974',
-    'openrouter/sonoma-sky-alpha': 'https://us5.datadoghq.com/graph/embed?token=0435fe7383a836f832d294ebf1a080cb4085083fd68289c1c90557f891a178f8&legend=true&height=318&width=974',
-  };
+     'x-ai/grok-4-fast:free': 'https://us5.datadoghq.com/graph/embed?token=b16da62ff58b2dfa419a7fb558ed01348bb7b9e02404756d1b1d2a6085c7a1b3&legend=true&height=318&width=974',
+   };
 
 
   useEffect(() => {
@@ -181,18 +180,29 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
             className="w-5 h-5"
           />
         );
-      case 'openrouter':
-        return (
-          <img 
-            src={isDark 
-              ? "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164086/OpenRouter_dark_yzpbfh.svg"
-              : "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164087/OpenRouter_light_pqiaok.svg"
-            }
-            alt="OpenRouter"
-            className="w-5 h-5"
-          />
-        );
-      default:
+       case 'openrouter':
+         return (
+           <img
+             src={isDark
+               ? "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164086/OpenRouter_dark_yzpbfh.svg"
+               : "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1757164087/OpenRouter_light_pqiaok.svg"
+             }
+             alt="OpenRouter"
+             className="w-5 h-5"
+           />
+         );
+       case 'x-ai':
+         return (
+           <img
+             src={isDark
+               ? "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1758453401/xAI_Grok__dark_n69hwt.svg"
+               : "https://res.cloudinary.com/dk0f2y0hu/image/upload/v1758453402/xAI_Grok__light_piczyy.svg"
+             }
+             alt="xAI"
+             className="w-6 h-6"
+           />
+         );
+       default:
         return <div className="w-5 h-5 bg-[#FF8C00] rounded-full"></div>;
     }
   };
@@ -304,9 +314,9 @@ export const AllModelsModal: React.FC<AllModelsModalProps> = ({
         {/* Models by Provider */}
         <div className="flex-1 p-6 overflow-y-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
           <div className="space-y-8">
-            {Object.entries(modelsByProvider).map(([provider, models]) => {
-              const filteredModels = filterModels(models);
-              if (filteredModels.length === 0) return null;
+            {Object.entries(modelsByProvider).filter(([provider]) => provider !== 'openrouter').map(([provider, models]) => {
+               const filteredModels = filterModels(models);
+               if (filteredModels.length === 0) return null;
               return (
                 <div key={provider}>
                   {/* Provider Header */}
