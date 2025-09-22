@@ -1,6 +1,6 @@
 {
-  "name": "Will Pro AI",
-  "short_name": "Will Pro",
+  "name": "Will Chat",
+  "short_name": "Will Chat",
   "description": "Advanced AI assistant with multimodal capabilities",
   "start_url": "/",
   "display": "standalone",

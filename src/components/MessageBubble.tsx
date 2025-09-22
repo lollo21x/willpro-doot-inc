@@ -101,7 +101,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         ) : (
           <img 
             src="https://res.cloudinary.com/dk0f2y0hu/image/upload/v1754574404/Will%20Pro%20AI%20favicon/WillPro-watchOS-Default-1024x1024_2x_rbdnnq.png"
-            alt="Will Pro AI"
+            alt="Will Chat AI"
             className="w-full h-full object-cover"
           />
         )}

@@ -105,12 +105,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center gap-3">
               <img 
                 src="https://res.cloudinary.com/dk0f2y0hu/image/upload/v1754574404/Will%20Pro%20AI%20favicon/WillPro-iOS-Default-1024x1024_2x_mg7010.png"
-                alt="Will Pro Logo"
+                alt="Will Chat Logo"
                 className="w-8 h-8 rounded-lg"
               />
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Will Pro
+                  Will Chat
                 </h1>
               </div>
             </div>
